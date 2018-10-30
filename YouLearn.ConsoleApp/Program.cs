@@ -18,7 +18,7 @@ namespace YouLearn.ConsoleApp
                 Senha = "12eeee"
             };
 
-            var response = new ServiceUsuario().AdicionarUsuario(request);
+            //var response = new ServiceUsuario().AdicionarUsuario(request);
 
             Console.ReadKey();
         }

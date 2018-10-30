@@ -2,6 +2,7 @@
 using System;
 using YouLearn.Domain.Arguments.Usuario;
 using YouLearn.Domain.Entities;
+using YouLearn.Domain.Interfaces.Repositories;
 using YouLearn.Domain.Interfaces.Services;
 using YouLearn.Domain.Resources;
 using YouLearn.Domain.ValueObjects;
@@ -10,7 +11,14 @@ namespace YouLearn.Domain.Services
 {
     public class ServiceUsuario : Notifiable, IServiceUsuario 
     {
-        public object RepositoryUsuario { get; private set; }
+        //Dependencias
+        private readonly IRepositoryUsuario _repositoryUsuario;
+
+        //Construtor
+        public ServiceUsuario(IRepositoryUsuario repositoryUsuario)
+        {
+            this._repositoryUsuario = repositoryUsuario;
+        }
 
         public AdicionarUsuarioResponse AdicionarUsuario(AdicionarUsuarioRequest request)
         {
@@ -28,20 +36,38 @@ namespace YouLearn.Domain.Services
 
             this.AddNotifications(nome, email, usuario);
 
-            if (this.IsInvalid() == true)
-            {
-                return null;
-            }
+            if (this.IsInvalid()) return null;
 
             //Persiste no banco de dados
-            AdicionarUsuarioResponse response = new AdicionarUsuarioResponse(Guid.NewGuid());//RepositoryUsuario().Salvar(usuario);
-            return response;
+            _repositoryUsuario.Salvar(usuario);
 
+            return new AdicionarUsuarioResponse(usuario.Id);
         }
 
         public AutenticarUsuarioResponse AutenticarUsuario(AutenticarUsuarioRequest request)
         {
-            throw new NotImplementedException();
+            if (request == null)
+            {
+                this.AddNotification("AutenticarUsuarioRequest", "objeto obrigatório");
+                return null;
+            }
+
+            Email email = new Email(request.Email);
+            Usuario usuario = new Usuario(email,request.Senha);
+
+            this.AddNotifications(usuario);
+
+            if (this.IsInvalid()) return null;
+
+            usuario = _repositoryUsuario.Obter(usuario.Email.Endereco, usuario.Senha);
+
+            if (usuario == null)
+            {
+                this.AddNotification("Usuario", "dados não encontrado");
+                return null;
+            }
+
+            return (AutenticarUsuarioResponse)usuario;
         }
     }
 }
