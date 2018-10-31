@@ -8,6 +8,11 @@ namespace YouLearn.Domain.Entities
 {
     public class Usuario: EntityBase
     {
+        public Usuario()
+        {
+
+        }
+
         public Usuario(Nome nome, Email email, string senha)
         {
             this.Nome = nome;
