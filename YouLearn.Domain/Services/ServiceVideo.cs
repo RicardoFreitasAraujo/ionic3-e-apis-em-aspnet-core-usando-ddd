@@ -72,13 +72,15 @@ namespace YouLearn.Domain.Services
         public IEnumerable<VideoResponse> Listar(string tags)
         {
             IEnumerable<Video> videoCollection = this._repositoryVideo.Listar(tags);
-            var response = videoCollection.ToList().Select(entidade => (VideoResponse)entidade );
+            var response = videoCollection.ToList().Select(entidade => (VideoResponse)entidade);
             return response;
         }
 
         public IEnumerable<VideoResponse> Listar(Guid idPlayList)
         {
-            throw new NotImplementedException();
+            IEnumerable<Video> videoCollection = this._repositoryVideo.Listar(idPlayList);
+            var response = videoCollection.ToList().Select(entidade => (VideoResponse)entidade);
+            return response;
         }
     }
 }
