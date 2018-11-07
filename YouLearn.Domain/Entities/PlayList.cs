@@ -7,6 +7,11 @@ namespace YouLearn.Domain.Entities
 {
     public class PlayList: EntityBase
     {
+        protected PlayList()
+        {
+
+        }
+
         public PlayList(string nome, Usuario usuario)
         {
             this.Nome = nome;

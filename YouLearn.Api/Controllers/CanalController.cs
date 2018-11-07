@@ -15,30 +15,34 @@ namespace YouLearn.Api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class CanalController : ControleBasico
+    public class CanalController : ControllerBase /*: ControleBasico*/
     {
+        
         private readonly IServiceCanal _serviceCanal;
         private readonly IUnitOfWork _unitOfWork;
-
-        public CanalController(IServiceCanal serviceCanal, IUnitOfWork unitOfWork) : base(unitOfWork)
+        
+        public CanalController(IUnitOfWork unitOfWork, IServiceCanal serviceCanal) //: base(unitOfWork)
         {
             this._serviceCanal = serviceCanal;
             this._unitOfWork = unitOfWork;
         }
-
+        
+        
         [HttpGet]
         [Route("/Listar")]
-        public async Task<IActionResult> Listar()
+        public IActionResult Listar()
         {
             try
             {
                 Guid idUsuario = Guid.NewGuid();
                 var response = this._serviceCanal.Listar(idUsuario);
-                return await this.ResponseAsync(response, this._serviceCanal);
+                //return await this.ResponseAsync(response, this._serviceCanal);
+                return  Ok(response);
             }
             catch (Exception ex)
             {
-                return await this.ResponseException(ex);
+                //return await this.ResponseException(ex);
+                return BadRequest(ex);
             }
         }
 
@@ -55,11 +59,13 @@ namespace YouLearn.Api.Controllers
 
                 var response = this._serviceCanal.AdicionarCanal(request, idUsuario);
 
-                return await this.ResponseAsync(response, this._serviceCanal);
+                //return await this.ResponseAsync(response, this._serviceCanal);
+                return Ok(response);
             }
             catch (Exception ex)
             {
-                return await this.ResponseException(ex);
+                //return await this.ResponseException(ex);
+                return BadRequest(ex);
             }
         }
 
@@ -70,11 +76,13 @@ namespace YouLearn.Api.Controllers
             try
             {
                 var response = this._serviceCanal.ExcluirCanal(id);
-                return await this.ResponseAsync(response, this._serviceCanal);
+                //return await this.ResponseAsync(response, this._serviceCanal);
+                return Ok(response);
             }
             catch(Exception ex)
             {
-                return await this.ResponseException(ex);
+                //return await this.ResponseException(ex);
+                return BadRequest(ex);
             }
         }
     }

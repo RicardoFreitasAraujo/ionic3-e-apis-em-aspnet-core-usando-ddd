@@ -8,7 +8,7 @@ using YouLearn.Infra.Transactions;
 
 namespace YouLearn.Api.Controllers.Base
 {
-    public class ControleBasico: Controller
+    public abstract class ControleBasico: Controller
     {
         private IUnitOfWork _unitofWork;
         private IServiceBase _serviceBase;
@@ -18,7 +18,7 @@ namespace YouLearn.Api.Controllers.Base
             this._unitofWork = unitofWork;
         }
 
-        public async Task<IActionResult> ResponseAsync(object result, IServiceBase serviceBase)
+        public async Task<IActionResult> ResponseAsync([FromBody]object result,[FromQuery] IServiceBase serviceBase)
         {
             this._serviceBase = serviceBase;
 

@@ -8,7 +8,7 @@ namespace YouLearn.Domain.Entities
 {
     public class Usuario: EntityBase
     {
-        public Usuario()
+        protected Usuario()
         {
 
         }

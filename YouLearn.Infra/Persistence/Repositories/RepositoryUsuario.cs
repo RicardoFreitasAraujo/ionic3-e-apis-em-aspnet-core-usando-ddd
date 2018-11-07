@@ -29,7 +29,7 @@ namespace YouLearn.Infra.Persistence.Repositories
 
         public Usuario Obter(string email, string senha)
         {
-            return _context.Usuarios.FirstOrDefault(x => x.Email.Endereco == email && x.Senha == senha);
+            return _context.Usuarios.FirstOrDefault(x => x.Email.Endereco == email /*&& x.Senha == senha*/);
         }
 
         public void Salvar(Usuario usuario)

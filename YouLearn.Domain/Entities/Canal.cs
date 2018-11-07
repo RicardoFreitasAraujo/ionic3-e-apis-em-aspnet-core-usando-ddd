@@ -6,6 +6,11 @@ namespace YouLearn.Domain.Entities
 {
     public class Canal: EntityBase
     {
+        public Canal()
+        {
+
+        }
+
         public Canal(string nome, string urlLogo, Usuario usuario)
         {
             this.Nome = nome;
