@@ -15,11 +15,13 @@ namespace YouLearn.Domain.Services
     {
         private readonly IRepositoryCanal _repositoryCanal;
         private readonly IRepositoryUsuario _repositoryUsuario;
+        private readonly IRepositoryVideo _repositoryVideo;
 
-        public ServiceCanal(IRepositoryCanal repositoryCanal, IRepositoryUsuario repositoryUsuario)
+        public ServiceCanal(IRepositoryCanal repositoryCanal, IRepositoryUsuario repositoryUsuario, IRepositoryVideo repositoryVideo)
         {
             this._repositoryCanal = repositoryCanal;
             this._repositoryUsuario = repositoryUsuario;
+            this._repositoryVideo = repositoryVideo;
         }
 
         public CanalResponse AdicionarCanal(AdicionarCanalRequest request, Guid idUsuario)
@@ -37,9 +39,8 @@ namespace YouLearn.Domain.Services
 
         public Arguments.Base.Response ExcluirCanal(Guid idCanal)
         {
-            //bool existe = this._repositoryVideo.ExisteCanalAssociado(idCanal);
-            bool existe = true;
-
+            bool existe = this._repositoryVideo.ExisteCanalAssociado(idCanal);
+            
             if (existe)
             {
                 this.AddNotification("Canal", "Não é possível excluir canal pois tem vídeo associado");

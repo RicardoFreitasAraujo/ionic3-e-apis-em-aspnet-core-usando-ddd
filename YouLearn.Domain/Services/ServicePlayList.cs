@@ -15,11 +15,13 @@ namespace YouLearn.Domain.Services
     {
         private readonly IRepositoryUsuario _repositoryUsuario;
         private readonly IRepositoryPlayList _repositoryPlayList;
+        private readonly IRepositoryVideo _repositoryVideo;
 
-        public ServicePlayList(IRepositoryUsuario repositoryUsuario, IRepositoryPlayList repositoryPlayList)
+        public ServicePlayList(IRepositoryUsuario repositoryUsuario, IRepositoryPlayList repositoryPlayList, IRepositoryVideo repositoryVideo)
         {
             this._repositoryUsuario = repositoryUsuario;
             this._repositoryPlayList = repositoryPlayList;
+            this._repositoryVideo = repositoryVideo;
         }
 
         public PlayListResponse AdicionarPlayList(AdicionarPlayListRequest request, Guid idUsuario)
@@ -39,8 +41,8 @@ namespace YouLearn.Domain.Services
 
         public Arguments.Base.Response ExcluirPlayList(Guid idPlayList)
         {
-            //bool existe _repositoryVideo.ExistePlayListAssociada(idPlayList);
-            bool existe = false;
+            bool existe = _repositoryVideo.ExistePlayListAssociado(idPlayList);
+            
             if (existe)
             {
                 this.AddNotification("PlalyList", "Não é possível excluit uma playlist associado a um vídeo");

@@ -61,5 +61,21 @@ namespace YouLearn.Api.Controllers
             }
         }
 
+        [HttpDelete]
+        [Route("api/v1/PlayList/Excluir/{id:Guid}")]
+        public async Task<IActionResult> Excluir (Guid id)
+        {
+            try
+            {
+                var response = this._servicePlayList.ExcluirPlayList(id);
+                return await this.ResponseAsync(response, this._servicePlayList);
+            }
+            catch (Exception ex)
+            {
+                return await this.ResponseException(ex);
+            }
+        }
+
+
     }
 }
