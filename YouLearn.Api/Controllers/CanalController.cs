@@ -20,11 +20,13 @@ namespace YouLearn.Api.Controllers
         
         private readonly IServiceCanal _serviceCanal;
         private readonly IUnitOfWork _unitOfWork;
-        
-        public CanalController(IUnitOfWork unitOfWork, IServiceCanal serviceCanal) //: base(unitOfWork)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public CanalController(IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork, IServiceCanal serviceCanal) //: base(unitOfWork)
         {
             this._serviceCanal = serviceCanal;
             this._unitOfWork = unitOfWork;
+            this._httpContextAccessor = httpContextAccessor;
         }
         
         
@@ -34,8 +36,10 @@ namespace YouLearn.Api.Controllers
         {
             try
             {
-                Guid idUsuario = Guid.NewGuid();
-                var response = this._serviceCanal.Listar(idUsuario);
+                string usuarioClaims = _httpContextAccessor.HttpContext.User.FindFirst("Usuario").Value;
+                AutenticarUsuarioResponse usuarioResponse = JsonConvert.DeserializeObject<AutenticarUsuarioResponse>(usuarioClaims);
+
+                var response = this._serviceCanal.Listar(usuarioResponse.Id);
                 //return await this.ResponseAsync(response, this._serviceCanal);
                 return  Ok(response);
             }
@@ -52,12 +56,10 @@ namespace YouLearn.Api.Controllers
         {
             try
             {
-                //string usuarioClaims = _httpContextAccessor.HttpContext.User.FindFirst("Usuario").Value();
-                //AutenticarUsuarioResponse usuarioResponse = JsonConvert.DeserializeObject<AutenticarUsuarioResponse>(usuarioClaims);
+                string usuarioClaims = this._httpContextAccessor.HttpContext.User.FindFirst("Usuario").Value;
+                AutenticarUsuarioResponse usuarioResponse = JsonConvert.DeserializeObject<AutenticarUsuarioResponse>(usuarioClaims);
 
-                Guid idUsuario = Guid.NewGuid();
-
-                var response = this._serviceCanal.AdicionarCanal(request, idUsuario);
+                var response = this._serviceCanal.AdicionarCanal(request, usuarioResponse.Id);
 
                 //return await this.ResponseAsync(response, this._serviceCanal);
                 return Ok(response);
